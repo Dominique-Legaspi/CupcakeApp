@@ -12,6 +12,7 @@ data class AddressUIState(
     val cardNum: String = "",
     val expiration: String = "",
     val secCode: String = "",
+    val payType: String = ""
 
 )
 

@@ -46,8 +46,11 @@
         <item quantity="other">%d cupcakes</item>
     </plurals>
 
+    <string name = "card_type">Payment Type</string>
     <string name = "visa">Visa</string>
     <string name = "master">Mastercard</string>
     <string name = "amex">American Express</string>
     <string name = "discover">Discover</string>
+    <string name = "address_name">Address</string>
+    <string name = "Address"> %1$s %2$s, %3$s, %4$s, %5$s, %6$s</string>
 </resources>
