@@ -3,9 +3,16 @@ package com.example.cupcake.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -17,9 +24,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.cupcake.R
 import com.example.cupcake.data.AddressUIState
 import com.example.cupcake.ui.theme.CupcakeTheme
@@ -32,6 +43,10 @@ fun AddressFieldscreen(
     modifier: Modifier = Modifier
 ) {
 
+    var cardNumber by remember { mutableStateOf("") }
+    var exp by remember { mutableStateOf("") }
+    var secCode by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
     var add1 by remember { mutableStateOf("") }
     var add2 by remember { mutableStateOf("") }
     var city by remember { mutableStateOf("") }
@@ -41,34 +56,187 @@ fun AddressFieldscreen(
 
 
     Column(
-        modifier = modifier,
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column() {
-                Row() {
-
-            }
-            Row(
+        Column(
+            modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium)),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
+        ) {
+            Text("Enter credit card information:".uppercase())
+            TextField(
+                value = cardNumber,
+                onValueChange = { newCardNumber -> cardNumber = newCardNumber },
+                label = { Text(text = "Card Number") },
+                shape = RoundedCornerShape(8.dp),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(dimensionResource(R.dimen.padding_medium)),
-                horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
-                verticalAlignment = Alignment.Bottom
+                    .padding(2.dp)
+            )
+            TextField(
+                value = name,
+                onValueChange = { newName -> name = newName },
+                label = { Text(text = "Name of Card Holder") },
+                shape = RoundedCornerShape(8.dp),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(2.dp)
+            )
+            Row {
+                TextField(
+                    value = exp,
+                    onValueChange = { newExp -> exp = newExp },
+                    label = { Text(text = "Expiration") },
+                    shape = RoundedCornerShape(8.dp),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(2.dp)
+                )
+                TextField(
+                    value = secCode,
+                    onValueChange = { newSecCode -> secCode = newSecCode },
+                    label = { Text(text = "CCV") },
+                    shape = RoundedCornerShape(8.dp),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(2.dp)
+                )
+            }
+            Divider(
+                thickness = dimensionResource(R.dimen.thickness_divider),
+                modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_medium))
+            )
+            Text("Enter shipping address:".uppercase())
+
+            TextField(
+                value = add1,
+                onValueChange = { newAdd -> add1 = newAdd },
+                label = { Text(text = "Address 1") },
+                shape = RoundedCornerShape(8.dp),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(2.dp)
+            )
+            TextField(
+                value = add2,
+                onValueChange = { newAdd -> add2 = newAdd },
+                label = { Text(text = "Address 2") },
+                shape = RoundedCornerShape(8.dp),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(2.dp)
+            )
+            Row {
+                TextField(
+                    value = city,
+                    onValueChange = { newCity -> city = newCity },
+                    label = { Text(text = "City") },
+                    shape = RoundedCornerShape(8.dp),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    modifier = Modifier
+                        .weight(2f)
+                        .padding(2.dp)
+                )
+                TextField(
+                    value = state,
+                    onValueChange = { newState -> state = newState },
+                    label = { Text(text = "State") },
+                    shape = RoundedCornerShape(8.dp),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(2.dp)
+                )
+            }
+            Row {
+                TextField(
+                    value = country,
+                    onValueChange = { newCountry -> country = newCountry },
+                    label = { Text(text = "Country") },
+                    shape = RoundedCornerShape(8.dp),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(2.dp)
+                )
+                TextField(
+                    value = zipcode,
+                    onValueChange = { newZip -> zipcode = newZip },
+                    label = { Text(text = "Zip") },
+                    shape = RoundedCornerShape(8.dp),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Done
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(2.dp)
+                )
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(R.dimen.padding_medium)),
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
+            verticalAlignment = Alignment.Bottom
+        ) {
+            OutlinedButton(
+                modifier = Modifier.weight(1f),
+                onClick = onCancelButtonClicked
             ) {
-                OutlinedButton(
-                    modifier = Modifier.weight(1f),
-                    onClick = onCancelButtonClicked
-                ) {
-                    Text(stringResource(R.string.cancel))
-                }
-                Button(
-                    modifier = Modifier.weight(1f),
-                    //add check to see all values are filled in
-                    //use enabled = {}
-                    onClick = onNextButtonClicked
-                ) {
-                    Text(stringResource(R.string.next))
-                }
+                Text(stringResource(R.string.cancel))
+            }
+            Button(
+                modifier = Modifier.weight(1f),
+                //add check to see all values are filled in
+                //use enabled = {}
+                onClick = onNextButtonClicked
+            ) {
+                Text(stringResource(R.string.next))
             }
         }
     }

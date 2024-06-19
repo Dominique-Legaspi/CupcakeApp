@@ -23,16 +23,23 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.cupcake.R
@@ -48,10 +55,14 @@ import com.example.cupcake.ui.theme.CupcakeTheme
 @Composable
 fun OrderSummaryScreen(
     orderUiState: OrderUiState,
+    options: List<String>,
+    onSelectionChanged: (String) -> Unit = {},
     onCancelButtonClicked: () -> Unit,
-    onSendButtonClicked: (String, String) -> Unit,
+    onNextButtonClicked: () -> Unit = {},
+//    onSendButtonClicked: (String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var selectedValue by rememberSaveable { mutableStateOf("") }
     val resources = LocalContext.current.resources
 
     val numberOfCupcakes = resources.getQuantityString(
@@ -92,29 +103,74 @@ fun OrderSummaryScreen(
                 Divider(thickness = dimensionResource(R.dimen.thickness_divider))
             }
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
+            Text("Select payment option:".uppercase()
+            )
+            options.forEach { item ->
+                Row(
+                    modifier = Modifier.selectable(
+                        selected = selectedValue == item,
+                        onClick = {
+                            selectedValue = item
+                            onSelectionChanged(item)
+                        }
+                    ),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = selectedValue == item,
+                        onClick = {
+                            selectedValue = item
+                            onSelectionChanged(item)
+                        }
+                    )
+                    Text(item)
+                }
+            }
             FormattedPriceLabel(
                 subtotal = orderUiState.price,
                 modifier = Modifier.align(Alignment.End)
             )
         }
+//        Row(
+//            modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
+//        ) {
+//            Column(
+//                verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
+//            ) {
+//                Button(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    onClick = onNextButtonClicked
+//                ) {
+//                    Text(stringResource(R.string.send))
+//                }
+//                OutlinedButton(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    onClick = onCancelButtonClicked
+//                ) {
+//                    Text(stringResource(R.string.cancel))
+//                }
+//            }
+//        }
         Row(
-            modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(R.dimen.padding_medium)),
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
+            verticalAlignment = Alignment.Bottom
         ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
+            OutlinedButton(
+                modifier = Modifier.weight(1f),
+                onClick = onCancelButtonClicked
             ) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { onSendButtonClicked(newOrder, orderSummary) }
-                ) {
-                    Text(stringResource(R.string.send))
-                }
-                OutlinedButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = onCancelButtonClicked
-                ) {
-                    Text(stringResource(R.string.cancel))
-                }
+                Text(stringResource(R.string.cancel))
+            }
+            Button(
+                modifier = Modifier.weight(1f),
+                // the button is enabled when the user makes a selection
+                enabled = selectedValue.isNotEmpty(),
+                onClick = onNextButtonClicked
+            ) {
+                Text(stringResource(R.string.next))
             }
         }
     }
@@ -126,8 +182,10 @@ fun OrderSummaryPreview() {
     CupcakeTheme {
         OrderSummaryScreen(
             orderUiState = OrderUiState(0, "Test", "Test", "$300.00"),
-            onSendButtonClicked = { subject: String, summary: String -> },
+//            onSendButtonClicked = { subject: String, summary: String -> },
+            onNextButtonClicked = {},
             onCancelButtonClicked = {},
+            options = listOf("Option 1", "Option 2", "Option 3", "Option 4"),
             modifier = Modifier.fillMaxHeight()
         )
     }

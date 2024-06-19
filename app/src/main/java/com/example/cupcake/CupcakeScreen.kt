@@ -45,8 +45,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.cupcake.data.AddressUIState
 import com.example.cupcake.data.DataSource
 import com.example.cupcake.data.OrderUiState
+import com.example.cupcake.ui.AddressFieldscreen
+import com.example.cupcake.ui.AddressViewModel
+import com.example.cupcake.ui.FinalScreen
 import com.example.cupcake.ui.OrderSummaryScreen
 import com.example.cupcake.ui.OrderViewModel
 import com.example.cupcake.ui.SelectOptionScreen
@@ -59,7 +63,9 @@ enum class CupcakeScreen(@StringRes val title: Int) {
     Start(title = R.string.app_name),
     Flavor(title = R.string.choose_flavor),
     Pickup(title = R.string.choose_pickup_date),
-    Summary(title = R.string.order_summary)
+    Summary(title = R.string.order_summary),
+    Info(title= R.string.customer_info),
+    Final(title= R.string.review_info),
 }
 
 /**
@@ -94,6 +100,7 @@ fun CupcakeAppBar(
 @Composable
 fun CupcakeApp(
     viewModel: OrderViewModel = viewModel(),
+    addressViewModel: AddressViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     // Get current back stack entry
@@ -113,6 +120,7 @@ fun CupcakeApp(
         }
     ) { innerPadding ->
         val uiState by viewModel.uiState.collectAsState()
+        val addressUiState by addressViewModel.uiState.collectAsState()
 
         NavHost(
             navController = navController,
@@ -166,10 +174,43 @@ fun CupcakeApp(
                     onCancelButtonClicked = {
                         cancelOrderAndNavigateToStart(viewModel, navController)
                     },
-                    onSendButtonClicked = { subject: String, summary: String ->
-                        shareOrder(context, subject = subject, summary = summary)
+//                    onSendButtonClicked = { subject: String, summary: String ->
+//                        shareOrder(context, subject = subject, summary = summary)
+//                    },
+                    onNextButtonClicked = {
+                        navController.navigate(CupcakeScreen.Info.name)
                     },
+                    options = DataSource.paymentOptions.map { id -> context.resources.getString(id) },
                     modifier = Modifier.fillMaxHeight()
+                )
+            }
+            composable(route = CupcakeScreen.Info.name) {
+                AddressFieldscreen(
+                    addressUIState = addressUiState,
+                    onNextButtonClicked = {
+                        navController.navigate(CupcakeScreen.Final.name)
+                    },
+                    onCancelButtonClicked = {
+                        cancelOrderAndNavigateToStart(viewModel, navController)
+                    },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(dimensionResource(R.dimen.padding_medium))
+                )
+            }
+            composable(route = CupcakeScreen.Final.name) {
+                FinalScreen(
+                    addressUIState = addressUiState,
+                    onSendButtonClicked = {
+//                        subject: String, summary: String ->
+//                        shareOrder(context, subject = subject, summary = summary)
+                    },
+                    onCancelButtonClicked = {
+                        cancelOrderAndNavigateToStart(viewModel, navController)
+                    },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(dimensionResource(R.dimen.padding_medium))
                 )
             }
         }
