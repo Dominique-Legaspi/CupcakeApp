@@ -45,12 +45,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.cupcake.data.AddressUIState
 import com.example.cupcake.data.DataSource
 import com.example.cupcake.data.OrderUiState
+import com.example.cupcake.ui.AddressFieldScreen
 import com.example.cupcake.ui.OrderSummaryScreen
 import com.example.cupcake.ui.OrderViewModel
 import com.example.cupcake.ui.SelectOptionScreen
 import com.example.cupcake.ui.StartOrderScreen
+import com.example.cupcake.ui.AddressViewModel
+import com.example.cupcake.ui.FinalScreen
+
 
 /**
  * enum values that represent the screens in the app
@@ -59,7 +64,9 @@ enum class CupcakeScreen(@StringRes val title: Int) {
     Start(title = R.string.app_name),
     Flavor(title = R.string.choose_flavor),
     Pickup(title = R.string.choose_pickup_date),
-    Summary(title = R.string.order_summary)
+    Summary(title = R.string.order_summary),
+    Address(title = R.string.address_input),
+    Final(title = R.string.final_summary)
 }
 
 /**
@@ -94,6 +101,7 @@ fun CupcakeAppBar(
 @Composable
 fun CupcakeApp(
     viewModel: OrderViewModel = viewModel(),
+    addressModel: AddressViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     // Get current back stack entry
@@ -113,6 +121,7 @@ fun CupcakeApp(
         }
     ) { innerPadding ->
         val uiState by viewModel.uiState.collectAsState()
+        val addressState by viewModel.uiState.collectAsState()
 
         NavHost(
             navController = navController,
@@ -166,10 +175,29 @@ fun CupcakeApp(
                     onCancelButtonClicked = {
                         cancelOrderAndNavigateToStart(viewModel, navController)
                     },
+                    onNextButtonClicked = {navController.navigate(CupcakeScreen.Address.name)},
+                    modifier = Modifier.fillMaxHeight(),
+                    onSendButtonClicked = {}
+                )
+            }
+            composable(route = CupcakeScreen.Address.name){
+                AddressFieldScreen(
+                    addressViewModel = addressModel,
+                    onCancelButtonClicked = {
+                        cancelOrderAndNavigateToStart(viewModel, navController)
+                    },
+                    onNextButtonClicked = { navController.navigate(CupcakeScreen.Final.name)}
+
+                )
+            }
+            composable(route = CupcakeScreen.Final.name){
+                val context = LocalContext.current
+                FinalScreen(
+                    addressUIState = AddressUIState(),
+                    onCancelButtonClicked = { cancelOrderAndNavigateToStart(viewModel, navController) },
                     onSendButtonClicked = { subject: String, summary: String ->
                         shareOrder(context, subject = subject, summary = summary)
-                    },
-                    modifier = Modifier.fillMaxHeight()
+                    }
                 )
             }
         }

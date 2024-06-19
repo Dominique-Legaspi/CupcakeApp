@@ -53,4 +53,6 @@
     <string name = "discover">Discover</string>
     <string name = "address_name">Address</string>
     <string name = "Address"> %1$s %2$s, %3$s, %4$s, %5$s, %6$s</string>
+    <string name = "final_summary">Address and Card Summary</string>
+    <string name = "address_input">Payment and Shipping</string>
 </resources>
