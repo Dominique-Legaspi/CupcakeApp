@@ -45,7 +45,6 @@
         <item quantity="one">%d cupcake</item>
         <item quantity="other">%d cupcakes</item>
     </plurals>
-    <string name="customer_info">Enter Your Information</string>
 
     <string name = "card_type">Payment Type</string>
     <string name = "visa">Visa</string>
@@ -54,6 +53,6 @@
     <string name = "discover">Discover</string>
     <string name = "address_name">Address</string>
     <string name = "Address"> %1$s %2$s, %3$s, %4$s, %5$s, %6$s</string>
-    <string name = "review_info">Review Information</string>
-    <string name="done">Done</string>
+    <string name = "final_summary">Address and Card Summary</string>
+    <string name = "address_input">Payment and Shipping</string>
 </resources>

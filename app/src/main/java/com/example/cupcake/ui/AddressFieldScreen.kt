@@ -1,5 +1,6 @@
 package com.example.cupcake.ui
 
+import android.inputmethodservice.Keyboard
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,8 +37,8 @@ import com.example.cupcake.data.AddressUIState
 import com.example.cupcake.ui.theme.CupcakeTheme
 
 @Composable
-fun AddressFieldscreen(
-    addressUIState: AddressUIState,
+fun AddressFieldScreen(
+    addressViewModel: AddressViewModel,
     onNextButtonClicked: () -> Unit = {},
     onCancelButtonClicked: () -> Unit = {},
     modifier: Modifier = Modifier
@@ -56,7 +57,7 @@ fun AddressFieldscreen(
 
 
     Column(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Column(
@@ -186,65 +187,44 @@ fun AddressFieldscreen(
                         .padding(2.dp)
                 )
             }
-            Row {
-                TextField(
-                    value = country,
-                    onValueChange = { newCountry -> country = newCountry },
-                    label = { Text(text = "Country") },
-                    shape = RoundedCornerShape(8.dp),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next
-                    ),
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(2.dp)
-                )
-                TextField(
-                    value = zipcode,
-                    onValueChange = { newZip -> zipcode = newZip },
-                    label = { Text(text = "Zip") },
-                    shape = RoundedCornerShape(8.dp),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Done
-                    ),
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(2.dp)
-                )
-            }
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(dimensionResource(R.dimen.padding_medium)),
-            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
-            verticalAlignment = Alignment.Bottom
-        ) {
-            OutlinedButton(
-                modifier = Modifier.weight(1f),
-                onClick = onCancelButtonClicked
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(R.dimen.padding_medium)),
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
+                verticalAlignment = Alignment.Bottom
             ) {
-                Text(stringResource(R.string.cancel))
-            }
-            Button(
-                modifier = Modifier.weight(1f),
-                //add check to see all values are filled in
-                //use enabled = {}
-                onClick = onNextButtonClicked
-            ) {
-                Text(stringResource(R.string.next))
+                OutlinedButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = onCancelButtonClicked
+                ) {
+                    Text(stringResource(R.string.cancel))
+                }
+                Button(
+                    modifier = Modifier.weight(1f),
+                    //add check to see all values are filled in
+                    //use enabled = {}
+                    enabled= check(add1, city,state,country,zipcode,name, cardNumber, exp, secCode),
+                    onClick = {
+                        addressViewModel.setAdd1(add1)
+                        addressViewModel.setAdd2(add2)
+                        addressViewModel.setCity(city)
+                        addressViewModel.setState(state)
+                        addressViewModel.setCountry(country)
+                        addressViewModel.setZip(zipcode)
+                        addressViewModel.setName(name)
+                        addressViewModel.setcardNum(cardNumber)
+                        addressViewModel.setExpir(exp)
+                        addressViewModel.setSecCode(secCode)
+                        onNextButtonClicked()}
+                ) {
+                    Text(stringResource(R.string.next))
+                }
             }
         }
     }
 }
-@Preview
-@Composable
-fun AddressPreview(){
-    CupcakeTheme {
-        AddressFieldscreen(addressUIState = AddressUIState())
-    }
+fun check(add1: String, city: String, state:String, country:String, zipcode:String, name:String, cardNum:String, expir: String, sec:String ): Boolean{
+    return (add1.isNotEmpty() && city.isNotEmpty() && state.isNotEmpty() && country.isNotEmpty()
+            && zipcode.isNotEmpty() && name.isNotEmpty() && cardNum.isNotEmpty() && expir.isNotEmpty() && sec.isNotEmpty())
 }

@@ -48,7 +48,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.cupcake.data.AddressUIState
 import com.example.cupcake.data.DataSource
 import com.example.cupcake.data.OrderUiState
-import com.example.cupcake.ui.AddressFieldscreen
+import com.example.cupcake.ui.AddressFieldScreen
 import com.example.cupcake.ui.AddressViewModel
 import com.example.cupcake.ui.FinalScreen
 import com.example.cupcake.ui.OrderSummaryScreen
@@ -64,8 +64,8 @@ enum class CupcakeScreen(@StringRes val title: Int) {
     Flavor(title = R.string.choose_flavor),
     Pickup(title = R.string.choose_pickup_date),
     Summary(title = R.string.order_summary),
-    Info(title= R.string.customer_info),
-    Final(title= R.string.review_info),
+    Info(title= R.string.address_input),
+    Final(title= R.string.final_summary),
 }
 
 /**
@@ -185,8 +185,8 @@ fun CupcakeApp(
                 )
             }
             composable(route = CupcakeScreen.Info.name) {
-                AddressFieldscreen(
-                    addressUIState = addressUiState,
+                AddressFieldScreen(
+                    addressViewModel = addressViewModel,
                     onNextButtonClicked = {
                         navController.navigate(CupcakeScreen.Final.name)
                     },
