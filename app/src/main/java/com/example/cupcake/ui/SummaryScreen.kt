@@ -55,6 +55,7 @@ import com.example.cupcake.ui.theme.CupcakeTheme
 @Composable
 fun OrderSummaryScreen(
     orderUiState: OrderUiState,
+    addressViewModel: AddressViewModel,
     options: List<String>,
     onSelectionChanged: (String) -> Unit = {},
     onCancelButtonClicked: () -> Unit,
@@ -168,7 +169,8 @@ fun OrderSummaryScreen(
                 modifier = Modifier.weight(1f),
                 // the button is enabled when the user makes a selection
                 enabled = selectedValue.isNotEmpty(),
-                onClick = onNextButtonClicked
+                onClick = {addressViewModel.setPayType(selectedValue)
+                    onNextButtonClicked()}
             ) {
                 Text(stringResource(R.string.next))
             }
@@ -176,6 +178,7 @@ fun OrderSummaryScreen(
     }
 }
 
+/*
 @Preview
 @Composable
 fun OrderSummaryPreview() {
@@ -183,6 +186,7 @@ fun OrderSummaryPreview() {
         OrderSummaryScreen(
             orderUiState = OrderUiState(0, "Test", "Test", "$300.00"),
 //            onSendButtonClicked = { subject: String, summary: String -> },
+
             onNextButtonClicked = {},
             onCancelButtonClicked = {},
             options = listOf("Option 1", "Option 2", "Option 3", "Option 4"),
@@ -190,3 +194,5 @@ fun OrderSummaryPreview() {
         )
     }
 }
+*/
+

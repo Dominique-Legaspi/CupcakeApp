@@ -110,7 +110,7 @@ fun AddressFieldScreen(
                 )
                 TextField(
                     value = secCode,
-                    onValueChange = { newSecCode -> secCode = newSecCode },
+                    onValueChange = { newSecCode -> if(newSecCode.length <= 3) secCode = newSecCode },
                     label = { Text(text = "CCV") },
                     shape = RoundedCornerShape(8.dp),
                     singleLine = true,
@@ -174,13 +174,43 @@ fun AddressFieldScreen(
                 )
                 TextField(
                     value = state,
-                    onValueChange = { newState -> state = newState },
+                    onValueChange = { newState -> if(newState.length <=2) state = newState },
                     label = { Text(text = "State") },
                     shape = RoundedCornerShape(8.dp),
                     singleLine = true,
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(2.dp)
+                )
+            }
+            Row {
+                TextField(
+                    value = zipcode,
+                    onValueChange = { newZip -> zipcode = newZip },
+                    label = { Text(text = "Zipcode") },
+                    shape = RoundedCornerShape(4.dp),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next
+                    ),
+                    modifier = Modifier
+                        .weight(2f)
+                        .padding(2.dp)
+                )
+                TextField(
+                    value = country,
+                    onValueChange = { newCountry -> country= newCountry},
+                    label = { Text(text = "Country") },
+                    shape = RoundedCornerShape(8.dp),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Go
                     ),
                     modifier = Modifier
                         .weight(1f)

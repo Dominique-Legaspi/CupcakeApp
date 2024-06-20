@@ -24,7 +24,7 @@ fun FinalScreen(
 
     addressUIState: AddressUIState,
     onCancelButtonClicked: () -> Unit,
-    onSendButtonClicked: () -> Unit,
+    onSendButtonClicked: (String, String) -> Unit,
     modifier: Modifier = Modifier
 ){
     val addressSummary = stringResource(
@@ -64,10 +64,10 @@ fun FinalScreen(
             ) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-//                    onClick = { onSendButtonClicked(addressUIState.payType, addressSummary) }
-                    onClick = onSendButtonClicked
+                    onClick = { onSendButtonClicked(addressUIState.payType, addressSummary) }
+                    //onClick = onSendButtonClicked
                 ) {
-                    Text(stringResource(R.string.done))
+                    Text(stringResource(R.string.send))
                 }
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),

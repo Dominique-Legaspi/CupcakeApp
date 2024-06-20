@@ -45,7 +45,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.cupcake.data.AddressUIState
 import com.example.cupcake.data.DataSource
 import com.example.cupcake.data.OrderUiState
 import com.example.cupcake.ui.AddressFieldScreen
@@ -164,6 +163,7 @@ fun CupcakeApp(
                     },
                     options = uiState.pickupOptions,
                     onSelectionChanged = { viewModel.setDate(it) },
+
                     modifier = Modifier.fillMaxHeight()
                 )
             }
@@ -171,6 +171,7 @@ fun CupcakeApp(
                 val context = LocalContext.current
                 OrderSummaryScreen(
                     orderUiState = uiState,
+                    addressViewModel = addressViewModel,
                     onCancelButtonClicked = {
                         cancelOrderAndNavigateToStart(viewModel, navController)
                     },
@@ -199,11 +200,12 @@ fun CupcakeApp(
                 )
             }
             composable(route = CupcakeScreen.Final.name) {
+                val context = LocalContext.current
                 FinalScreen(
                     addressUIState = addressUiState,
                     onSendButtonClicked = {
-//                        subject: String, summary: String ->
-//                        shareOrder(context, subject = subject, summary = summary)
+                        subject: String, summary: String ->
+                        shareOrder(context, subject = subject, summary = summary)
                     },
                     onCancelButtonClicked = {
                         cancelOrderAndNavigateToStart(viewModel, navController)

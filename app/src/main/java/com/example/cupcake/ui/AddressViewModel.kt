@@ -93,5 +93,12 @@ class AddressViewModel: ViewModel() {
             )
         }
     }
+    fun setPayType(newType: String){
+        _uiState.update{
+            currentState -> currentState.copy(
+                payType = newType
+            )
+        }
+    }
 
 }
