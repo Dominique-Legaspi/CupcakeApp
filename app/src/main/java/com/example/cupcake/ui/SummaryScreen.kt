@@ -172,7 +172,7 @@ fun OrderSummaryScreen(
                 onClick = {addressViewModel.setPayType(selectedValue)
                     onNextButtonClicked()}
             ) {
-                Text(stringResource(R.string.next))
+                Text(stringResource(R.string.checkout))
             }
         }
     }

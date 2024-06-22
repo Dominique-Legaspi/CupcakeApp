@@ -210,7 +210,7 @@ fun AddressFieldScreen(
                     singleLine = true,
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Go
+                        imeAction = ImeAction.Done
                     ),
                     modifier = Modifier
                         .weight(1f)
